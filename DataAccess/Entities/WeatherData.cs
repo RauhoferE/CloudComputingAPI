@@ -13,6 +13,8 @@ namespace DataAccess.Entities
         public float TemperatureCelsius { get; set; }
         public float HumidityPercent { get; set; }
         public float WindSpeedKph { get; set; }
+
+        public int ConditionId { get; set; }
         public Condition Condition { get; set; }
     }
 }
