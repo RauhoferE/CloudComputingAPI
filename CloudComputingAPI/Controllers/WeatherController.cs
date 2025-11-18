@@ -28,14 +28,14 @@ namespace CloudComputingAPI.Controllers
             return Task.FromResult<IActionResult>(Ok(cities));
         }
 
-        [HttpGet("latest-weather")]
+        [HttpGet("latest")]
         public Task<IActionResult> GetLatestWeatherData([FromQuery]int cityId)
         {
             var weatherData = this.weatherService.GetLatestWeatherDataAsync(cityId);
             return Task.FromResult<IActionResult>(Ok(weatherData));
         }
 
-        [HttpGet("all-weather")]
+        [HttpGet("all")]
         public Task<IActionResult> GetAllWeatherData([FromQuery]int cityId)
         {
             var weatherData = this.weatherService.GetAllWeatherDataAsync(cityId);
