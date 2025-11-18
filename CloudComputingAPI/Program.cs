@@ -9,7 +9,7 @@ namespace CloudComputingAPI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             var configuration = new ConfigurationBuilder()
@@ -35,6 +35,7 @@ namespace CloudComputingAPI
             builder.Services.AddTransient<IWeatherService, WeatherService>();
 
             var app = builder.Build();
+            await EnsureDatabaseIsCreatedAndMigrated(app);
 
 
             // Configure the HTTP request pipeline.
@@ -51,6 +52,35 @@ namespace CloudComputingAPI
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static async Task EnsureDatabaseIsCreatedAndMigrated(IHost app)
+        {
+            // Scopes are created for transient operations
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    // Resolve the DbContext instance
+                    var context = services.GetRequiredService<WeatherDbContext>();
+
+                    // Apply any pending migrations or create the database if it doesn't exist
+                    await context.Database.MigrateAsync();
+
+                    // Optional: You can also add seed data logic here if needed:
+                    // await SeedData.Initialize(context); 
+                }
+                catch (Exception ex)
+                {
+                    // Log any errors that occurred during migration
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+
+                    // Note: In production, you might want to stop the application here if DB is critical
+                    // throw; 
+                }
+            }
         }
     }
 }
