@@ -1,4 +1,4 @@
-    <div class="min-h-screen bg-gray-100 p-8 flex items-start justify-center" style="margin: 2em;">
+    <div class="min-h-screen bg-gray-100 p-8 flex items-start justify-center">
       <div class="w-full max-w-4xl space-y-8">
         <h1 class="text-3xl font-extrabold text-gray-800 text-center mb-6">
           Globale Weather Dashboard
@@ -7,7 +7,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white p-6 rounded-xl shadow-lg">
           
           <!-- Region Selector -->
-          <mat-form-field appearance="outline" class="w-full">
+          <mat-form-field class="w-full" >
             <mat-label>Region auswählen</mat-label>
             <mat-select [value]="selectedRegionId()" (valueChange)="onRegionChange($event)">
               @for (region of regions(); track region.id) {
@@ -17,7 +17,7 @@
           </mat-form-field>
           
           <!-- City Selector -->
-          <mat-form-field appearance="outline" class="w-full">
+          <mat-form-field class="w-full">
             <mat-label>Stadt auswählen</mat-label>
             <mat-select 
               [disabled]="citiesLoading() || cities().length === 0" 
@@ -37,7 +37,7 @@
           </mat-form-field>
 
           <!-- View Selector -->
-          <mat-form-field appearance="outline" class="w-full">
+          <mat-form-field  class="w-full">
             <mat-label>Datenansicht</mat-label>
             <mat-select [value]="selectedView()" (valueChange)="selectedView.set($event)">
               @for (view of views; track view.id) {
@@ -79,7 +79,7 @@
 
             <!-- Display Current Weather Data -->
             @if (selectedView() === 'current') {
-              <div class="grid grid-cols-2 gap-4 text-lg">
+                            <div class="grid grid-cols-2 gap-4 text-lg">
                 <p><strong>Date:</strong> {{ displayedWeatherData()[0].date | date:'medium' }}</p>
                 <p><strong>Temperature (C):</strong> <span class="text-3xl font-extrabold text-red-600">{{ displayedWeatherData()[0].temperatureCelsius | number:'1.1-1' }} °C</span></p>
                 <p><strong>Condition:</strong> {{ displayedWeatherData()[0].condition.name }}</p>
