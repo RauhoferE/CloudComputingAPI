@@ -2,6 +2,7 @@
 using AutoMapper;
 using CloudComputingAPI.Interfaces;
 using CloudComputingAPI.MapperProfiles;
+using CloudComputingAPI.Middleware;
 using CloudComputingAPI.Services;
 using DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,10 @@ namespace CloudComputingAPI
             // Add services to the container.
             builder.Services.AddSerilog();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(x =>
+            {
+                x.Filters.Add<HttpResponseExceptionFilter>();
+            });
 
             builder.Services.AddDbContext<WeatherDbContext>(x => 
             x.UseSqlServer(builder.Configuration.GetConnectionString("WeatherDbConnection")));
