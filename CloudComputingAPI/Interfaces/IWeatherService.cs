@@ -5,9 +5,9 @@ namespace CloudComputingAPI.Interfaces
 {
     public interface IWeatherService
     {
-        public Task<List<RegionDto>> GetAllRegionsAsync();
+        public Task<List<IdNameDto>> GetAllRegionsAsync();
 
-        public Task<List<CityDto>> GetCitiesByRegionAsync(int regionId);
+        public Task<List<IdNameDto>> GetCitiesByRegionAsync(int regionId);
 
         public Task<WeatherDataDto> GetLatestWeatherDataAsync(int cityId);
 

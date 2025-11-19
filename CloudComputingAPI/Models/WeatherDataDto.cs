@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public CityDto City { get; set; }
+        public IdNameDto City { get; set; }
 
         public DateTime Date { get; set; }
 

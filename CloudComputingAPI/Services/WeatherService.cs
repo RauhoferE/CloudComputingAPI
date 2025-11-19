@@ -20,9 +20,9 @@ namespace CloudComputingAPI.Services
             this.mapper = mapper;
         }
 
-        public Task<List<RegionDto>> GetAllRegionsAsync()
+        public Task<List<IdNameDto>> GetAllRegionsAsync()
         {
-            return Task.FromResult(this.mapper.Map<List<RegionDto>>(
+            return Task.FromResult(this.mapper.Map<List<IdNameDto>>(
                 this.dbContext.Regions.Include(x => x.Cities).ToList()
                 ));
         }
@@ -40,12 +40,12 @@ namespace CloudComputingAPI.Services
             return Task.FromResult(this.mapper.Map<List<WeatherDataDto>>( weatherData));
         }
 
-        public Task<List<CityDto>> GetCitiesByRegionAsync(int regionId)
+        public Task<List<IdNameDto>> GetCitiesByRegionAsync(int regionId)
         {
             var region = this.dbContext.Regions.FirstOrDefault(x => x.Id == regionId) ?? throw new NotFoundException("Region not found!");
             var cities = this.dbContext.Cities.Include(x => x.Region).Where(c => c.Region.Id == regionId);
 
-            return Task.FromResult(this.mapper.Map<List<CityDto>>( cities.ToList()));
+            return Task.FromResult(this.mapper.Map<List<IdNameDto>>( cities.ToList()));
         }
 
         public Task<WeatherDataDto> GetLatestWeatherDataAsync(int cityId)

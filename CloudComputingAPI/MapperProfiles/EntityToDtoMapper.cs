@@ -10,12 +10,10 @@ namespace CloudComputingAPI.MapperProfiles
     {
         public EntityToDtoMapper()
         {
-            CreateMap<Region, RegionDto>()
-                .ForMember(dest => dest.Citys, opt => opt.MapFrom(src => src.Cities));
             CreateMap<Condition, ConditionDto>();
-            CreateMap<City, CityDto>();
             CreateMap<WeatherData, WeatherDataDto>();
             CreateMap<City, IdNameDto>();
+            CreateMap<Region, IdNameDto>();
         }
     }
 }
