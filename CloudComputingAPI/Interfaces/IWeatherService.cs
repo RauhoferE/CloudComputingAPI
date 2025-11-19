@@ -1,15 +1,16 @@
-﻿using DataAccess.Entities;
+﻿using CloudComputingAPI.Models;
+using DataAccess.Entities;
 
 namespace CloudComputingAPI.Interfaces
 {
     public interface IWeatherService
     {
-        public Task<List<Region>> GetAllRegionsAsync();
+        public Task<List<RegionDto>> GetAllRegionsAsync();
 
-        public Task<List<City>> GetCitiesByRegionAsync(int regionId);
+        public Task<List<CityDto>> GetCitiesByRegionAsync(int regionId);
 
-        public Task<WeatherData> GetLatestWeatherDataAsync(int cityId);
+        public Task<WeatherDataDto> GetLatestWeatherDataAsync(int cityId);
 
-        public Task<List<WeatherData>> GetAllWeatherDataAsync(int cityId);
+        public Task<List<WeatherDataDto>> GetAllWeatherDataAsync(int cityId);
     }
 }

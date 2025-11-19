@@ -15,31 +15,28 @@ namespace CloudComputingAPI.Controllers
         }
 
         [HttpGet("regions")]
-        public Task<IActionResult> GetRegionsAsync()
+        public async Task<IActionResult> GetRegionsAsync()
         {
-            var regions =  this.weatherService.GetAllRegionsAsync();
-            return Task.FromResult<IActionResult>(Ok(regions));
+            var t = await this.weatherService.GetAllRegionsAsync();
+            return Ok(t);
         }
 
         [HttpGet("cities")]
-        public Task<IActionResult> GetCitiesOfRegion([FromQuery]int regionId)
+        public async Task<IActionResult> GetCitiesOfRegion([FromQuery]int regionId)
         {
-            var cities = this.weatherService.GetCitiesByRegionAsync(regionId);
-            return Task.FromResult<IActionResult>(Ok(cities));
+            return Ok(await this.weatherService.GetCitiesByRegionAsync(regionId));
         }
 
         [HttpGet("latest")]
-        public Task<IActionResult> GetLatestWeatherData([FromQuery]int cityId)
+        public async Task<IActionResult> GetLatestWeatherData([FromQuery]int cityId)
         {
-            var weatherData = this.weatherService.GetLatestWeatherDataAsync(cityId);
-            return Task.FromResult<IActionResult>(Ok(weatherData));
+            return Ok(await this.weatherService.GetLatestWeatherDataAsync(cityId));
         }
 
         [HttpGet("all")]
-        public Task<IActionResult> GetAllWeatherData([FromQuery]int cityId)
+        public async Task<IActionResult> GetAllWeatherData([FromQuery]int cityId)
         {
-            var weatherData = this.weatherService.GetAllWeatherDataAsync(cityId);
-            return Task.FromResult<IActionResult>(Ok(weatherData));
+            return Ok(await this.weatherService.GetAllWeatherDataAsync(cityId));
         }
     }
 }

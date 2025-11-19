@@ -1,8 +1,11 @@
 
+using AutoMapper;
 using CloudComputingAPI.Interfaces;
+using CloudComputingAPI.MapperProfiles;
 using CloudComputingAPI.Services;
 using DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace CloudComputingAPI
@@ -31,6 +34,11 @@ namespace CloudComputingAPI
             builder.Services.AddDbContext<WeatherDbContext>(x => 
             x.UseSqlServer(builder.Configuration.GetConnectionString("WeatherDbConnection")));
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+            builder.Services.AddAutoMapper(x =>
+            {
+                x.AddProfile<EntityToDtoMapper>();
+            });
 
             builder.Services.AddTransient<IWeatherService, WeatherService>();
 

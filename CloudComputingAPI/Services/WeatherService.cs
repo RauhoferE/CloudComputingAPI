@@ -1,5 +1,7 @@
-﻿using CloudComputingAPI.Exceptions;
+﻿using AutoMapper;
+using CloudComputingAPI.Exceptions;
 using CloudComputingAPI.Interfaces;
+using CloudComputingAPI.Models;
 using DataAccess.Database;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +12,22 @@ namespace CloudComputingAPI.Services
     {
         private readonly WeatherDbContext dbContext;
 
-        public WeatherService(WeatherDbContext dbContext)
+        private readonly IMapper mapper;
+
+        public WeatherService(WeatherDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
+            this.mapper = mapper;
         }
 
-        public Task<List<Region>> GetAllRegionsAsync()
+        public Task<List<RegionDto>> GetAllRegionsAsync()
         {
-            return Task.FromResult(this.dbContext.Regions.ToList());
+            return Task.FromResult(this.mapper.Map<List<RegionDto>>(
+                this.dbContext.Regions.Include(x => x.Cities).ToList()
+                ));
         }
 
-        public Task<List<WeatherData>> GetAllWeatherDataAsync(int cityId)
+        public Task<List<WeatherDataDto>> GetAllWeatherDataAsync(int cityId)
         {
             var city = this.dbContext.Cities.FirstOrDefault(x => x.Id == cityId) ?? throw new NotFoundException("City not found!");
             var weatherData = this.dbContext.WeatherDatas
@@ -30,18 +37,18 @@ namespace CloudComputingAPI.Services
                 .OrderByDescending(wd => wd.Date)
                 .ToList();
 
-            return Task.FromResult(weatherData);
+            return Task.FromResult(this.mapper.Map<List<WeatherDataDto>>( weatherData));
         }
 
-        public Task<List<City>> GetCitiesByRegionAsync(int regionId)
+        public Task<List<CityDto>> GetCitiesByRegionAsync(int regionId)
         {
             var region = this.dbContext.Regions.FirstOrDefault(x => x.Id == regionId) ?? throw new NotFoundException("Region not found!");
             var cities = this.dbContext.Cities.Include(x => x.Region).Where(c => c.Region.Id == regionId);
 
-            return Task.FromResult(cities.ToList());
+            return Task.FromResult(this.mapper.Map<List<CityDto>>( cities.ToList()));
         }
 
-        public Task<WeatherData> GetLatestWeatherDataAsync(int cityId)
+        public Task<WeatherDataDto> GetLatestWeatherDataAsync(int cityId)
         {
             var city = this.dbContext.Cities.FirstOrDefault(x => x.Id == cityId) ?? throw new NotFoundException("City not found!");
             var weatherData = this.dbContext.WeatherDatas
@@ -52,7 +59,7 @@ namespace CloudComputingAPI.Services
                 .FirstOrDefault() ?? throw new NotFoundException("City not found!");
 
 
-            return Task.FromResult(weatherData);
+            return Task.FromResult(this.mapper.Map<WeatherDataDto>( weatherData));
         }
     }
 }
