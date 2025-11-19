@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { City, Region, WeatherData } from '../models/weather.models';
+import { IdName, WeatherData } from '../models/weather.models';
 import { environment } from '../environments/environment';
 
 @Injectable({
@@ -14,12 +14,12 @@ export class WeatherService {
 
   }
 
-  public getAllRegions(): Observable<Region[]>{
-    return this.http.get<Region[]>(`${environment.apiUrl}/weather/regions`);
+  public getAllRegions(): Observable<IdName[]>{
+    return this.http.get<IdName[]>(`${environment.apiUrl}/weather/regions`);
   }
 
-  public getAllCitiesByRegion(regionId: number): Observable<City[]>{
-    return this.http.get<City[]>(`${environment.apiUrl}/cities?regionId=${regionId}`);
+  public getAllCitiesByRegion(regionId: number): Observable<IdName[]>{
+    return this.http.get<IdName[]>(`${environment.apiUrl}/weather/cities?regionId=${regionId}`);
   }
 
   public getLatestWeatherData(cityId: number): Observable<WeatherData>{

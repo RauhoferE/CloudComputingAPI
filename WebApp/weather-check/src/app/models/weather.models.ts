@@ -1,34 +1,16 @@
-export interface Region {
+export interface IdName{
     id: number;
     name: string;
-    cities?: City[];
 }
 
-export interface Region {
-    id: number;
-    name: string;
-    cities?: City[];
-}
-
-export interface City {
-    id: number;
-    name: string;
-    regionId: number;
-    region: Region;
-    weatherData?: WeatherData[];
-}
-
-export interface Condition{
-    id: number;
-    name: string;
+export interface Condition extends IdName{
     description: string;
-    weatherData?: WeatherData[];
 }
 
 export interface WeatherData {
     id: number;
     cityId: number;
-    city: City;
+    city: IdName;
     date: Date;
     temperatureCelsius: number;
     humidityPercent: number;

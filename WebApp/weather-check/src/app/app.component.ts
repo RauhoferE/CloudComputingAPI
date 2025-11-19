@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { City, Region, WeatherData, WeatherView } from './models/weather.models';
+import { IdName, WeatherData, WeatherView } from './models/weather.models';
 import { WeatherService } from './services/weather.service';
 import { lastValueFrom } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop'; // Import toSignal utility
@@ -29,8 +29,8 @@ export class AppComponent {
   selectedView = signal<WeatherView['id']>('current'); // Default view
   
   // Data arrays
-  regions = toSignal<Region[]>(this.weatherService.getAllRegions());
-  cities = signal<City[]>([]);
+  regions = toSignal<IdName[]>(this.weatherService.getAllRegions());
+  cities = signal<IdName[]>([]);
 allWeatherDataByCity = signal<WeatherData[]>([]);
   
   // Loading states (simulate async loading for better UX)

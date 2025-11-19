@@ -35,6 +35,17 @@ namespace CloudComputingAPI
                 x.Filters.Add<HttpResponseExceptionFilter>();
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("WeatherApiCors",
+                    policy =>
+                    {
+                        policy.WithOrigins(builder.Configuration.GetSection("AllowedCorsHosts").Get<string[]>())
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
+            });
+
             builder.Services.AddDbContext<WeatherDbContext>(x => 
             x.UseSqlServer(builder.Configuration.GetConnectionString("WeatherDbConnection")));
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -57,6 +68,8 @@ namespace CloudComputingAPI
             }
 
             app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseCors("WeatherApiCors");
 
             app.UseAuthorization();
 
