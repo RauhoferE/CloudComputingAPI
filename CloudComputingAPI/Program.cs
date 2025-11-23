@@ -73,8 +73,11 @@ namespace CloudComputingAPI
 
             app.UseAuthorization();
 
+            app.UseStaticFiles();
 
             app.MapControllers();
+
+            app.MapFallbackToFile("index.html");
 
             app.Run();
         }
