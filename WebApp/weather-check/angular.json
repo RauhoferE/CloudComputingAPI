@@ -40,7 +40,7 @@
           "configurations": {
             "production": {
               "outputPath":{
-                "base": "../../CloudComputingAPI/wwwroot",
+                "base": "dist",
                 "browser": ""
               },
               "budgets": [

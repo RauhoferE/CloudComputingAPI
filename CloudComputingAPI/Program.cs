@@ -26,6 +26,12 @@ namespace CloudComputingAPI
                 config.ReadFrom.Configuration(builder.Configuration);
             });
 
+            var logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration.Build())
+                .CreateLogger();
+
+            // Used for serilog request logging
+            Log.Logger = logger;
 
             // Add services to the container.
             builder.Services.AddSerilog();
@@ -60,12 +66,7 @@ namespace CloudComputingAPI
             var app = builder.Build();
             await EnsureDatabaseIsCreatedAndMigrated(app);
 
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSerilogRequestLogging();
-            }
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
             app.UseRouting();
@@ -79,7 +80,17 @@ namespace CloudComputingAPI
 
             app.MapFallbackToFile("index.html");
 
-            app.Run();
+            try
+            {
+                app.Run();
+                logger.Information("Application started.");
+            }
+            catch (Exception e)
+            {
+                logger.Fatal("Application terminated unexpectedly: ");
+                logger.Fatal(e.Message);
+            }
+            
         }
 
         private static async Task EnsureDatabaseIsCreatedAndMigrated(IHost app)
@@ -92,18 +103,22 @@ namespace CloudComputingAPI
                 {
                     // Resolve the DbContext instance
                     var context = services.GetRequiredService<WeatherDbContext>();
+                    var logger = services.GetRequiredService<Serilog.ILogger>();
+
+                    logger.Information("Migrating database.....");
 
                     // Apply any pending migrations or create the database if it doesn't exist
                     await context.Database.MigrateAsync();
 
+                    logger.Information("Migrating database done.");
                     // Optional: You can also add seed data logic here if needed:
                     // await SeedData.Initialize(context); 
                 }
                 catch (Exception ex)
                 {
                     // Log any errors that occurred during migration
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+                    var logger = services.GetRequiredService<Serilog.ILogger>();
+                    logger.Error(ex, "An error occurred while migrating or seeding the database.");
 
                     // Note: In production, you might want to stop the application here if DB is critical
                     // throw; 
