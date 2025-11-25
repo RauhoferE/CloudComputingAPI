@@ -4,7 +4,7 @@ name: Docker Build & Push to Docker Hub
 on:
   push:
     branches:
-      - main
+      - docker
   workflow_dispatch:
 
 # Definieren der Umgebungsvariablen für den Image-Namen
