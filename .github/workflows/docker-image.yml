@@ -59,7 +59,3 @@ jobs:
           tags: |
             ${{ env.DOCKER_HUB_REPO }}:${{ env.IMAGE_TAG }}
             ${{ env.DOCKER_HUB_REPO }}:latest
-            
-      - name: Image URL anzeigen
-        # Zeigt den vollständigen Pfad des gepushten Images zur Bestätigung an
-        run: echo "Image erfolgreich gepusht: ${{ env.DOCKER_HUB_REPO }}:${{ env.IMAGE_TAG }}"
