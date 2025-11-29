@@ -4,7 +4,7 @@ name: Docker Build & Push to Docker Hub
 on:
   push:
     branches:
-      - docker
+      - main
   workflow_dispatch:
 
 # Definieren der Umgebungsvariablen für den Image-Namen
@@ -19,16 +19,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      
-      - name: Replace Connection String in appsettings.json
-        run: |
-          CONNECTION_STRING="${{ secrets.PRODUCTION_CONNECTIONSTRING }}"
-          sed -i "s|__DB_CONNECTION_STRING_PLACEHOLDER__|$CONNECTION_STRING|g" CloudComputingAPI/appsettings.Production.json
-        env:
-          DB_CONNECTION_STRING: ${{ secrets.PRODUCTION_CONNECTIONSTRING }}
-          
-      - name: Show updated appsettings.json (Optional, zum Debuggen)
-        run: cat CloudComputingAPI/appsettings.Production.json
 
       - name: Set up QEMU (For Multi-Arch Support, optional)
         # Ermöglicht das Bauen von Images für verschiedene Architekturen (z.B. ARM)
@@ -59,3 +49,4 @@ jobs:
           tags: |
             ${{ env.DOCKER_HUB_REPO }}:${{ env.IMAGE_TAG }}
             ${{ env.DOCKER_HUB_REPO }}:latest
+
