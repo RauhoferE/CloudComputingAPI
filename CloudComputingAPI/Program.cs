@@ -53,15 +53,16 @@ namespace CloudComputingAPI
             });
             var env = builder.Configuration["WeatherDbConnectionEnv"];
 
-            if (builder.Environment.IsProduction())
+            if (builder.Environment.IsDevelopment())
             {
                 builder.Services.AddDbContext<WeatherDbContext>(x =>
-                    x.UseSqlServer(builder.Configuration["WeatherDbConnectionEnv"]));
+                    x.UseSqlServer(builder.Configuration.GetConnectionString("WeatherDbConnection")));
+
             }
             else
             {
                 builder.Services.AddDbContext<WeatherDbContext>(x =>
-                    x.UseSqlServer(builder.Configuration.GetConnectionString("WeatherDbConnection")));
+                    x.UseSqlServer(builder.Configuration["WeatherDbConnectionEnv"]));
             }
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
